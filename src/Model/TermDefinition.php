@@ -1,18 +1,16 @@
 <?php
 
-namespace DNADesign\Glossary\Models;
+namespace DNADesign\Glossary\Model;
 
-use DNADesign\Glossary\Models\Term;
 use SilverStripe\Forms\CompositeValidator;
 use SilverStripe\Forms\RequiredFields;
 use SilverStripe\ORM\DataObject;
 
-class Definition extends DataObject
+class TermDefinition extends DataObject
 {
-    private static $table_name = 'TextDefinition';
+    private static $table_name = 'TermDefinition';
 
     private static $db = [
-        'UID' => 'Varchar(100)',
         'Content' => 'Text',
         'Sort' => 'Int'
     ];
@@ -24,7 +22,6 @@ class Definition extends DataObject
     private static $default_sort = 'Sort ASC';
 
     private static $summary_fields = [
-        'UID' => 'UID',
         'Content' => 'Definition',
     ];
 
@@ -33,11 +30,10 @@ class Definition extends DataObject
         $fields = parent::getCMSFields();
 
         $fields->removeByName([
-            'UID',
             'Sort',
             'TermID'
         ]);
-        
+
         return $fields;
     }
 
@@ -51,8 +47,55 @@ class Definition extends DataObject
         $compositeValidator = parent::getCMSCompositeValidator();
 
         $compositeValidator->addValidator(RequiredFields::create(['Content']));
-    
+
         return $compositeValidator;
+    }
+
+    /**
+     * Return whether this text definition can have contexts.
+     * Its parent Glossary Term need to be a locale present in
+     *
+     * @return boolean
+     */
+    public function requireContext()
+    {
+        $use = static::config()->get('use_context_for_locales');
+        if (!$use || empty($use)) {
+            return false;
+        }
+
+        //TODO: locales
+        // $definition = $this->Term();
+        // if ($definition) {
+        //     $locale = $definition->Locale;
+        //     if ($locale) {
+        //         return in_array($locale, $use);
+        //     }
+        // }
+
+        return false;
+    }
+
+    /**
+     * Check if at least one locale requires contexts to be added to text definitions
+     *
+     * @return boolean
+     */
+    public static function contexts_in_use()
+    {
+        $use = static::config()->get('use_context_for_locales');
+        if (!$use || empty($use)) {
+            return false;
+        }
+
+        // Check that there is a sources available for the locale for which the context should be used
+        $sources = GlossaryTerm::config()->get('sources');
+        if ($sources && is_array($sources) && !empty($sources)) {
+            $locales = array_intersect(array_values($use), array_keys($sources));
+            return count($locales) > 0;
+        }
+
+        return false;
     }
 
     /**

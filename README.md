@@ -32,6 +32,11 @@ The Glossary module, developed by DNADesign, is a SilverStripe module designed f
 2. Use the Glossary module interface to select and define glossary words.
 3. Save the changes, and the glossary words will be clickable on the front end.
 
+## TODO
+
+1. Caching
+2. Locales
+
 ## Contribution
 
 Feel free to contribute to the development of this module. Submit bug reports, feature requests, or even pull requests to help make the Glossary module even better.

@@ -1,15 +1,15 @@
 <?php
 
-use DNADesign\Glossary\Extensions\GlossaryTermContextExtension;
-use DNADesign\Glossary\Extensions\TermDefinitionContextExtension;
-use DNADesign\Glossary\Models\GlossaryTerm;
-use DNADesign\Glossary\Models\TermDefinition;
-use DNADesign\Glossary\Shortcodes\GlossaryTermShortcodeProvider;
-use SilverStripe\Core\Manifest\ModuleLoader;
-use SilverStripe\Forms\HTMLEditor\TinyMCEConfig;
 use SilverStripe\ORM\DB;
-use SilverStripe\View\Parsers\ShortcodeParser;
 use SilverStripe\View\Requirements;
+use DNADesign\Glossary\Model\GlossaryTerm;
+use DNADesign\Glossary\Model\TermDefinition;
+use SilverStripe\Core\Manifest\ModuleLoader;
+use SilverStripe\View\Parsers\ShortcodeParser;
+use SilverStripe\Forms\HTMLEditor\TinyMCEConfig;
+use DNADesign\Glossary\Extensions\GlossaryTermContextExtension;
+use DNADesign\Glossary\Shortcodes\GlossaryTermShortcodeProvider;
+use DNADesign\Glossary\Extensions\TermDefinitionContextExtension;
 
 call_user_func(function () {
     $module = ModuleLoader::inst()->getManifest()->getModule('dnadesign/silverstripe-glossary');
@@ -20,7 +20,7 @@ call_user_func(function () {
             'glossary' => $module->getResource('client/js/tinymce/plugins/glossary/plugin.js')
         ])
        ->addButtonsToLine(2, 'glossary');
-       
+
     // Make sure the Glossary table exists before requiring otherwise it will break dev/build
     if (in_array(GlossaryTerm::config()->get('table_name'), DB::table_list())) {
         // Add necessary extension to allow user to manage term definition context

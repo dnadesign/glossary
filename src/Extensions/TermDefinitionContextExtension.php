@@ -2,8 +2,8 @@
 
 namespace DNADesign\Glossary\Extensions;
 
-use DNADesign\Glossary\Models\TextDefinition;
-use DNADesign\Glossary\Models\TermDefinitionContext;
+use DNADesign\Glossary\Model\TermDefinition;
+use DNADesign\Glossary\Model\TermDefinitionContext;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\ListboxField;
 use SilverStripe\ORM\DataExtension;
@@ -42,7 +42,7 @@ class TermDefinitionContextExtension extends DataExtension
      */
     public function updateSummaryFields(&$fields)
     {
-        if (TextDefinition::contexts_in_use()) {
+        if (TermDefinition::contexts_in_use()) {
             $fields['getContextsList'] = 'Contexts';
         }
     }

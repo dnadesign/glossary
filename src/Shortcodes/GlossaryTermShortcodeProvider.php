@@ -2,7 +2,7 @@
 
 namespace DNADesign\Glossary\Shortcodes;
 
-use DNADesign\Glossary\Models\Definition;
+use DNADesign\Glossary\Model\GlossaryTerm;
 use SilverStripe\View\Parsers\ShortcodeHandler;
 
 class GlossaryTermShortcodeProvider implements ShortcodeHandler
@@ -23,7 +23,7 @@ class GlossaryTermShortcodeProvider implements ShortcodeHandler
             return $content;
         }
 
-        $glossaryTerm = Definition::getByIdentifier($arguments['id']);
+        $glossaryTerm = GlossaryTerm::getByIdentifier($arguments['id']);
         if (!$glossaryTerm || !$glossaryTerm->exists()) {
             return $content;
         }

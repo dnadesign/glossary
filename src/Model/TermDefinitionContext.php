@@ -1,8 +1,8 @@
 <?php
 
-namespace DNADesign\Glossary\Models;
+namespace DNADesign\Glossary\Model;
 
-use DNADesign\Glossary\Models\GlossaryTerm;
+use DNADesign\Glossary\Model\GlossaryTerm;
 use SilverStripe\ORM\DataObject;
 
 class TermDefinitionContext extends DataObject

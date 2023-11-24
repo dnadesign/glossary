@@ -2,9 +2,9 @@
 
 namespace DNADesign\Glossary\Extensions;
 
-use DNADesign\Glossary\Models\GlossaryTerm;
-use DNADesign\Glossary\Models\TextDefinition;
-use DNADesign\Glossary\Models\TermDefinitionContext;
+use DNADesign\Glossary\Model\GlossaryTerm;
+use DNADesign\Glossary\Model\TermDefinition;
+use DNADesign\Glossary\Model\TermDefinitionContext;
 use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataList;
 
@@ -44,16 +44,16 @@ class GlossaryTermContextExtension extends Extension
         foreach ($options as $option) {
             $id = isset($option['value']) ? $option['value'] : null;
             if (is_numeric($id)) {
-                if ($id === "0") {
+                if ($id === '0') {
                     $alteredOptions[] = $option;
                 } else {
                     // Find the context associated with the text definition
                     // TODO: optimise queries
-                    $textDefinitions = TextDefinition::get()->filter('GlossaryTermID', $id);
-                    if ($textDefinitions && $textDefinitions->exists()) {
+                    $termDefinitions = TermDefinition::get()->filter('GlossaryTermID', $id);
+                    if ($termDefinitions && $termDefinitions->exists()) {
                         $contextsIDs = [];
-                        foreach ($textDefinitions as $textDefinition) {
-                            $contextsIDs = array_merge($contextsIDs, $textDefinition->Contexts()->column('ID'));
+                        foreach ($termDefinitions as $termDefinition) {
+                            $contextsIDs = array_merge($contextsIDs, $termDefinition->Contexts()->column('ID'));
                         }
                         array_unique($contextsIDs);
                         if (empty($contextsIDs)) {
@@ -106,7 +106,7 @@ class GlossaryTermContextExtension extends Extension
      */
     public function updateSignaturedList(&$list, $codes)
     {
-        if (TextDefinition::contexts_in_use()) {
+        if (TermDefinition::contexts_in_use()) {
             if ($this->owner->Definitions()->exists()) {
                 $contexts = TermDefinitionContext::get()->filter('Definitions.ID', $this->owner->Definitions()->column('ID'));
                 if ($contexts && $contexts->exists()) {

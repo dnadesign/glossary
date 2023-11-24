@@ -23,7 +23,7 @@
   },
   "extra": {
       "expose": [
-          "client/dist"
+          "client"
       ]
   },
   "prefer-stable": true,

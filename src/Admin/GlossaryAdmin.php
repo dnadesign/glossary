@@ -2,22 +2,22 @@
 
 namespace DNADesign\Glossary\Admins;
 
-use DNADesign\Glossary\Models\TermDefinition;
-use DNADesign\Glossary\Models\TextDefinition;
-use DNADesign\Glossary\Models\TermDefinitionContext;
+use DNADesign\Glossary\Model\GlossaryTerm;
+use DNADesign\Glossary\Model\TermDefinition;
+use DNADesign\Glossary\Model\TermDefinitionContext;
 use SilverStripe\Admin\ModelAdmin;
 
 class GlossaryAdmin extends ModelAdmin
 {
     private static $managed_models = [
-        Terms::class
+        GlossaryTerm::class
     ];
 
     private static $url_segment = 'glossary';
 
-    private static $menu_title = 'Term Definition';
+    private static $menu_title = 'Glossary';
 
-    private static $menu_icon = 'dnadesign/silverstripe-glossaary:client/icons/glossary-icon.svg';
+    private static $menu_icon = 'dnadesign/silverstripe-glossary:client/icons/glossary-icon.svg';
 
     /**
      * Hide the Context tab if not required
@@ -42,6 +42,6 @@ class GlossaryAdmin extends ModelAdmin
      */
     private function showContextTab()
     {
-        return TextDefinition::contexts_in_use();
+        return TermDefinition::contexts_in_use();
     }
 }

@@ -1,12 +1,9 @@
 <?php
 
-namespace DNADesign\Glossary\Models;
+namespace DNADesign\Glossary\Model;
 
-use DNADesign\Glossary\Models\TextDefinition;
-use DNADesign\Glossary\Services\MaoriTranslationService;
+use DNADesign\Glossary\Model\TermDefinition;
 use DNADesign\Glossary\Shortcodes\GlossaryTermShortcodeProvider;
-use Exception;
-use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\DropdownField;
@@ -16,7 +13,6 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\ToggleCompositeField;
 use SilverStripe\i18n\i18n;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\Security\Permission;
@@ -29,21 +25,24 @@ class GlossaryTerm extends DataObject implements PermissionProvider
 
     private static $db = [
         'Term' => 'Varchar(100)',
-        'Locale' => 'Varchar(10)'
+        //TODO: locales
+        // 'Locale' => 'Varchar(10)'
     ];
 
     private static $has_many = [
-        'Definitions' => TextDefinition::class
+        'Definitions' => TermDefinition::class
     ];
 
-    private static $defaults = [
-        'Locale' => 'mi_NZ'
-    ];
+    //TODO: locales
+    // private static $defaults = [
+    //     'Locale' => 'mi_NZ'
+    // ];
 
     private static $summary_fields = [
         'ID' => 'ID',
         'Term' => 'Term',
-        'getLanguageName' => 'Language',
+        //TODO: locales
+        // 'getLanguageName' => 'Language',
         'Definitions.Count' => 'Definitions #'
     ];
 
@@ -52,9 +51,10 @@ class GlossaryTerm extends DataObject implements PermissionProvider
     public function getCMSFields()
     {
         $this->beforeUpdateCMSFields(function ($fields) {
-            // Language
-            $language = DropdownField::create('Locale', 'Language', $this->getLanguageOptions());
-            $fields->replaceField('Locale', $language);
+            //TODO: locales
+            // // Language
+            // $language = DropdownField::create('Locale', 'Language', $this->getLanguageOptions());
+            // $fields->replaceField('Locale', $language);
 
             if ($this->IsInDB()) {
                 // Definitions
@@ -95,25 +95,25 @@ class GlossaryTerm extends DataObject implements PermissionProvider
         return $this->Term;
     }
 
-    /**
-     * Return an array of Locale > Language Name
-     * to choose from as source of the definition
-     *
-     * @return array
-     */
-    public function getLanguageOptions()
-    {
-        $options = [];
+    // /**
+    //  * Return an array of Locale > Language Name
+    //  * to choose from as source of the definition
+    //  *
+    //  * @return array
+    //  */
+    // public function getLanguageOptions()
+    // {
+    //     $options = [];
 
-        $sources = array_keys($this->config()->get('sources'));
-        foreach ($sources as $locale) {
-            $options[$locale] =  \Locale::getDisplayLanguage($locale, i18n::get_locale());
-        }
+    //     $sources = array_keys($this->config()->get('sources'));
+    //     foreach ($sources as $locale) {
+    //         $options[$locale] =  \Locale::getDisplayLanguage($locale, i18n::get_locale());
+    //     }
 
-        $this->extend('updateLanguageOptions', $options);
+    //     $this->extend('updateLanguageOptions', $options);
 
-        return $options;
-    }
+    //     return $options;
+    // }
 
     /**
      * Return the right service for the language
@@ -193,31 +193,32 @@ class GlossaryTerm extends DataObject implements PermissionProvider
 
         $cacheKey = static::singleton()->getCacheKey();
 
-        // Attempt to load from cache
-        $cache = Injector::inst()->get(CacheInterface::class . '.glossaryCache');
-
-        $options = ($cache->has($cacheKey)) ? $cache->get($cacheKey) : [];
+        //TODO: cache
+        // // Attempt to load from cache
+        // $cache = Injector::inst()->get(CacheInterface::class . '.glossaryCache');
+        // $options = ($cache->has($cacheKey)) ? $cache->get($cacheKey) : [];
 
         // If no options have been cached, then create the json
         if (empty($options)) {
             if ($definitions->count() > 0) {
                 $options = [
-                    ['value' => 0, 'text' => 'Select a word']
+                    ['value' => "0", 'text' => 'Select a word']
                 ];
-        
+
                 foreach ($definitions as $desc) {
-                    $options[] = ['value' => $desc->ID, 'text' => $desc->Term];
+                    $options[] = ['value' => "$desc->ID", 'text' => $desc->Term];
                 }
             }
 
             static::singleton()->extend('updateOptionsForCmsSelector', $options);
 
             $options = json_encode($options);
-    
-            // set a value and save it via the adapter
-            $cache->set($cacheKey, $options);
+
+            //TODO: cache
+            // // set a value and save it via the adapter
+            // $cache->set($cacheKey, $options);
         }
-        
+
         return $options;
     }
 
@@ -230,7 +231,7 @@ class GlossaryTerm extends DataObject implements PermissionProvider
     public function getCacheKey()
     {
         $glossaryTerms = static::get();
-        $textDefinitions = TextDefinition::get();
+        $textDefinitions = TermDefinition::get();
 
         $params = [
             $glossaryTerms->count(),
@@ -303,7 +304,7 @@ class GlossaryTerm extends DataObject implements PermissionProvider
     /**
      * Build a representation of this GlossaryTerm as a JSON object
      * that can be included in a template from the ShortCode render
-     * 
+     *
      * @return json
      */
     public function toJSON($args = null)
@@ -318,7 +319,7 @@ class GlossaryTerm extends DataObject implements PermissionProvider
 
         if ($definitionsToDisplay->count() > 0) {
             $definitions = [];
-            
+
             foreach ($definitionsToDisplay as $definition) {
                 $definitions[] = [
                     'id' => $definition->ID,
