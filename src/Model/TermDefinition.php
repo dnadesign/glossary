@@ -11,7 +11,7 @@ class TermDefinition extends DataObject
     private static $table_name = 'TermDefinition';
 
     private static $db = [
-        'Content' => 'Text',
+        'Content' => 'HTMLText',
         'Sort' => 'Int'
     ];
 
