@@ -14,12 +14,15 @@ use DNADesign\Glossary\Extensions\TermDefinitionContextExtension;
 call_user_func(function () {
     $module = ModuleLoader::inst()->getManifest()->getModule('dnadesign/silverstripe-glossary');
 
-    // Enable insert-link to internal pages
-    TinyMCEConfig::get('cms')
-        ->enablePlugins([
-            'glossary' => $module->getResource('client/js/tinymce/plugins/glossary/plugin.js')
-        ])
-       ->addButtonsToLine(2, 'glossary');
+
+    foreach (GlossaryTerm::config()->get('editors') as $editor) {
+        // Enable insert-link to internal pages
+        TinyMCEConfig::get($editor)
+            ->enablePlugins([
+                'glossary' => $module->getResource('client/js/tinymce/plugins/glossary/plugin.js')
+            ])
+        ->addButtonsToLine(2, 'glossary');
+    }
 
     // Make sure the Glossary table exists before requiring otherwise it will break dev/build
     if (in_array(GlossaryTerm::config()->get('table_name'), DB::table_list())) {
