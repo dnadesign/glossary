@@ -2,10 +2,11 @@
 
 namespace DNADesign\Glossary\Admins;
 
+use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\Forms\LiteralField;
 use DNADesign\Glossary\Model\GlossaryTerm;
 use DNADesign\Glossary\Model\TermDefinition;
 use DNADesign\Glossary\Model\TermDefinitionContext;
-use SilverStripe\Admin\ModelAdmin;
 
 class GlossaryAdmin extends ModelAdmin
 {
@@ -36,7 +37,7 @@ class GlossaryAdmin extends ModelAdmin
     }
 
     /**
-     * Check if USer are allowed to create contexts
+     * Check if Users are allowed to create contexts
      *
      * @return boolean
      */
