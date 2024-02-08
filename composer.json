@@ -1,20 +1,13 @@
 {
   "name": "dnadesign/silverstripe-glossary",
-  "type": "silverstripe-vendormodule",
   "description": "A dictionary like module allowing definitions to be set for in-content words.",
-  "license": "BSD-3-Clause",
+  "type": "silverstripe-vendormodule",
   "keywords": [
-      "silverstripe",
-      "glossary",
-      "definition",
-      "translation"
+    "silverstripe",
+    "glossary",
+    "definition"
   ],
-  "authors": [
-      {
-          "name": "DNA Design",
-          "homepage": "http://dna.c.nzm"
-      }
-  ],
+  "license": "BSD-3-Clause",
   "require": {
     "silverstripe/vendor-plugin": "^2.0",
     "silverstripe/framework": "^5.0",
@@ -22,9 +15,9 @@
     "symbiote/silverstripe-gridfieldextensions": "^4"
   },
   "extra": {
-      "expose": [
-          "client"
-      ]
+    "expose": [
+      "client"
+    ]
   },
   "prefer-stable": true,
   "minimum-stability": "dev"
